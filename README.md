@@ -31,8 +31,8 @@ Dieses Projekt ist eine Gruppenarbeit von: Kevin Leutwyler, Mojtaba Hasanzadeh u
         ```bash
         docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
         ```
-    - Nvidia GPU (Fortgeschritten):
-        - Für Windows-User wird hier WSL2 (Linuxsystem) benötigt.
+   - Nvidia GPU (Fortgeschritten):
+        - Für Windows-User wird hier WSL2 (Windows Linux Subsystem) benötigt.
         - Installiere das NVIDIA Container Toolkit:
         ```bash
         curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
