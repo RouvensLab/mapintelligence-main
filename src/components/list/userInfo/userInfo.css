@@ -1,0 +1,35 @@
+/*Stil für gesamten Userinfo-Container*/
+.userInfo{
+    padding: 20px;
+    display: flex; /*Elemente nebeneinander anzeigen*/
+    align-items: center; /*alles vertikal in der Mitte ausrichten*/
+    justify-content: space-between; /*Elemente gleichmässt mit Platz dazwischen verstreuen*/
+
+    /*Benutzerbereich (Avatar & Name)*/
+    .user{
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        /*Avatarbild*/
+        img {
+            width: 50px;
+            height: 50px;
+            border-radiius: 50%; /*macht Bild rund*/
+            object-fit: cover; /*Bild wird skaliert, ohne verzerrt zu werden*/
+        }
+    }
+
+    /*Bereich für Icons*/
+    .icons {
+        display: flex;
+        gap: 20px;
+
+        /*Stil für jedes Icon*/
+        img {
+            width: 20px;
+            height: 20 px;
+            cursor: pointer; /*verändert Cursor in eine Hand, wenn man mit der Maus darüber fährt*/
+        }
+    }
+}
