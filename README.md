@@ -26,19 +26,20 @@ Dieses Projekt ist eine Gruppenarbeit von: Kevin Leutwyler, Mojtaba Hasanzadeh u
     - Dokumentation zum Aufsetzen von Ollama mit Docker: [Docker Hub](https://hub.docker.com/r/ollama/ollama)
     - [Docker Desktop Setup](https://docs.docker.com/desktop/setup/install/windows-install/)
 2. Terminal: `docker pull ollama/ollama`
-3. Nur mit der CPU (Einfacher):
-    ```bash
-    docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
-    ```
-4. Nvidia GPU (Fortgeschritten):
-    - Für Windows-User wird hier WSL2 (Linuxsystem) benötigt.
-    - Installiere das NVIDIA Container Toolkit:
-      ```bash
-      curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
-      curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
-      sudo apt-get update
-      sudo apt-get install -y nvidia-container-toolkit
-      ```
+3. Im Folgenden wird bestimmt, ob docker, d.h. das LLM CPU oder GPU nutzt. CPU ist einfacher zum instalieren, da nicht noch wsl2 gebraucht wird, jedoch auch langsamer. GPU wäre schneller beim Antwort geben.
+    - Nur mit der CPU (Einfacher):
+        ```bash
+        docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+        ```
+    - Nvidia GPU (Fortgeschritten):
+        - Für Windows-User wird hier WSL2 (Linuxsystem) benötigt.
+        - Installiere das NVIDIA Container Toolkit:
+        ```bash
+        curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg
+        curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+        sudo apt-get update
+        sudo apt-get install -y nvidia-container-toolkit
+        ```
 
 Ein Modell starten (herunterladen):
 ```bash
