@@ -1,3 +1,6 @@
+![Beispiel Screenshot](public/BeispielScreenshot.png)
+
+
 Datum: 24.02.2025
 
 # Mapintelligence Chat App
