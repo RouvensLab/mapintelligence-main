@@ -17,7 +17,7 @@ const Login = () => {
     }
 
     const handleLogin = e =>{
-        e.preventDefault()
+        e.preventDefault()//braucht noch erweiterung
     }
 
     return <div className="login">
@@ -31,6 +31,7 @@ const Login = () => {
         </div>
         <div className="separator"></div>
         <div className="item">
+            {/* Registrierungsbereich */}
         <h2>Create An Account,</h2>
             <form>
                 <label htmlFor="file">

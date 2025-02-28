@@ -1,0 +1,50 @@
+@startuml
+
+package "src" {
+  package "components" {
+    package "api" {
+      class Chatbot {
+        +mainAgent(message: string, markdown: string, update_Bot_stream_func: function): Promise<string>
+      }
+    }
+    package "chat" {
+      class Chat {
+        +onSendMessage: function
+        +chatHistory: Array
+      }
+    }
+    package "graph" {
+      class Graph {
+        +markdown: string
+      }
+    }
+    package "list" {
+      class List {
+      }
+    }
+    package "login" {
+      class Login {
+      }
+    }
+    package "notification" {
+      class Notification {
+      }
+    }
+  }
+  
+  class App {
+    -markdown: string
+    -chatHistory: Array
+    -user: boolean
+    +handleSendMessage(message: string, update_Bot_stream_func: function): Promise<string>
+  }
+  
+  App --> Chat
+  App --> List
+  App --> Login
+  App --> Notification
+  App --> Graph
+  App --> Chatbot : uses
+}
+
+@enduml

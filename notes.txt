@@ -1,0 +1,27 @@
+mapintelligence-main
+├── public
+│   ├── icons...
+│   ├── Bilder...
+│   └── ...
+├── src
+│   ├── components
+│   │   ├── api
+│   │   │   └── Chatbot.js
+│   │   ├── chat
+│   │   │   └── Chat.jsx
+│   │   ├── graph
+│   │   │   └── Graph.jsx
+│   │   ├── list
+│   │   │   └── List.jsx
+│   │   ├── login
+│   │   │   └── Login.jsx
+│   │   └── notification
+│   │       └── Notification.jsx
+│   ├── App.jsx
+│   ├── index.js
+│   └── ...
+├── index.html
+├── package.json
+└── ...
+
+

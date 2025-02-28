@@ -6,6 +6,34 @@ import Notification from "./components/notification/Notification";
 import Graph from "./components/graph/Graph";
 import { mainAgent } from "./components/api/Chatbot";
 
+/**
+ * App component that serves as the main entry point for the application.
+ * 
+ * @component
+ * 
+ * @example
+ * return (
+ *   <App />
+ * )
+ * 
+ * @returns {JSX.Element} The rendered component.
+ * 
+ * @description
+ * The App component manages the state for markdown content and chat history.
+ * It conditionally renders different components based on the user's authentication status.
+ * 
+ * @state {string} markdown - The markdown content used for rendering the graph.
+ * @state {Array} chatHistory - The history of chat messages.
+ * 
+ * @param {boolean} user - A boolean indicating if the user is authenticated.
+ * 
+ * @function handleSendMessage
+ * @description Sends a message to the main agent and updates the chat history and markdown content.
+ * @param {string} message - The message to be sent.
+ * @param {function} update_Bot_stream_func - A function to update the bot stream.
+ * @returns {Promise<string>} The response answer from the main agent.
+ */
+
 const App = () => {
   //const [topMarkdown, setTopMarkdown] = useState(``);
   const [markdown, setMarkdown] = useState(` 
@@ -21,6 +49,7 @@ markmap:
 - Sub
 - Sub
  `);
+ 
   const [chatHistory, setChatHistory] = useState([]);
   const user = true;
   

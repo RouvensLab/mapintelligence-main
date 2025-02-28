@@ -3,42 +3,47 @@ import "./chat.css";
 import EmojiPicker from "emoji-picker-react";
 
 const Chat = ({ onSendMessage, chatHistory }) => {
-    const [open, setOpen] = useState(false);
-    const [text, setText] = useState("");
-    const [messages, setMessages] = useState(chatHistory || []);
+    const [open, setOpen] = useState(false); // State to manage emoji picker visibility
+    const [text, setText] = useState(""); // State to manage the current text input
+    const [messages, setMessages] = useState(chatHistory || []); // State to manage the chat messages
 
-    const endRef = useRef(null);
+    const endRef = useRef(null); // Ref to keep track of the end of the messages for auto-scrolling
 
     useEffect(() => {
+        // Scroll to the end of the messages whenever the messages state changes
         endRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
     const handleEmoji = (e) => {
+        // Append the selected emoji to the current text input
         setText((prev) => prev + e.emoji);
-        setOpen(false);
+        setOpen(false); // Close the emoji picker
     };
 
     const handleSend = async (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
             e.preventDefault();
             if (text.trim()) {
+                // Create a new message object for the user's message
                 const newMessage = {
                     id: messages.length + 1,
                     text,
                     own: true,
                     timestamp: "Just now"
                 };
-                setMessages((prev) => [...prev, newMessage]);
-                setText("");
+                setMessages((prev) => [...prev, newMessage]); // Add the user's message to the messages state
+                setText(""); // Clear the text input
 
+                // Create a placeholder for the bot's response
                 let botMessage = {
                     id: messages.length + 2,
                     text: "",
                     own: false,
                     timestamp: "Just now"
                 };
-                setMessages((prev) => [...prev, botMessage]);
+                setMessages((prev) => [...prev, botMessage]); // Add the bot's placeholder message to the messages state
 
+                // Function to update the bot's message incrementally
                 const updateBotMessage = (token) => {
                     botMessage.text += token;
                     setMessages((prev) => {
@@ -48,8 +53,9 @@ const Chat = ({ onSendMessage, chatHistory }) => {
                     });
                 };
 
+                // Send the user's message and get the bot's response
                 const response = await onSendMessage(text, updateBotMessage);
-                botMessage.text = response;
+                botMessage.text = response; // Update the bot's message with the final response
                 setMessages((prev) => {
                     const updatedMessages = [...prev];
                     updatedMessages[updatedMessages.length - 1] = { ...botMessage, id: messages.length + 2 };

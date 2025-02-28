@@ -5,6 +5,27 @@ import * as markmap from "markmap-view";
 const { Markmap, loadCSS, loadJS } = markmap;
 const transformer = new Transformer();
 
+/**
+ * Custom hook to render a Markmap visualization from Markdown content.
+ *
+ * @param {string} md - The Markdown content to be transformed into a Markmap.
+ * @param {Object} options - Optional configuration for the Markmap.
+ * @returns {JSX.Element} An SVG element containing the rendered Markmap.
+ *
+ * @example
+ * const markdownContent = "# Title\n## Subtitle\n- Item 1\n- Item 2";
+ * const options = { width: "800px", height: "600px" };
+ * const markmapElement = useMarkmap(markdownContent, options);
+ *
+ * @remarks
+ * This hook uses the `transformer` and `markmap` libraries to convert Markdown
+ * content into a visual mind map. It dynamically loads necessary CSS and JS
+ * assets based on the features used in the Markdown content.
+ *
+ * @note
+ * Ensure that the `transformer` and `markmap` libraries ar properly imported
+ * and available in your project.
+ */
 const useMarkmap = (md, options) => {
   const ref = useRef(null);
 

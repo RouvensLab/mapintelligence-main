@@ -26,8 +26,8 @@ Dieses Projekt ist eine Gruppenarbeit von: Kevin Leutwyler, Mojtaba Hasanzadeh u
 ## LLM mit Docker installieren:
 
 1. Docker Desktop installieren
-    - Dokumentation zum Aufsetzen von Ollama mit Docker: [Docker Hub](https://hub.docker.com/r/ollama/ollama)
     - [Docker Desktop Setup](https://docs.docker.com/desktop/setup/install/windows-install/)
+    - Folgende Schritte 2 und 3 dienen zum Aufsetzen von Ollama mit Docker. Quelle: [Docker Hub](https://hub.docker.com/r/ollama/ollama).
 2. Terminal: `docker pull ollama/ollama`
 3. Im Folgenden wird bestimmt, ob docker, d.h. das LLM CPU oder GPU nutzt. CPU ist einfacher zum instalieren, da nicht noch wsl2 gebraucht wird, jedoch auch langsamer. GPU wäre schneller beim Antwort geben.
     - Nur mit der CPU (Einfacher):

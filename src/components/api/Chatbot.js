@@ -31,15 +31,11 @@ const model = new ChatOllama({
 
 
 const chatPrompt = ChatPromptTemplate.fromMessages([
-  SystemMessagePromptTemplate.fromTemplate(
-    "The following is a friendly conversation between a human and an AI."
-  ),
+  SystemMessagePromptTemplate.fromTemplate("The following is a friendly conversation between a human and an AI."),
   new MessagesPlaceholder("history"),
+  SystemMessagePromptTemplate.fromTemplate("The AI is aware of the current Markmap/Mindmap: {current_markmap}"),
   SystemMessagePromptTemplate.fromTemplate(
-    "The AI is aware of the current Markmap/Mindmap: {current_markmap}"
-  ),
-  SystemMessagePromptTemplate.fromTemplate(
-    `You are a helpful Agent who helps the user by providing clear, detailed feedback and actionable instructions for updating a Markmap.
+`You are a helpful Agent who helps the user by providing clear, detailed feedback and actionable instructions for updating a Markmap.
 **Instructions:**
 - If the user provides an update instruction, just give the Generator Instructions at the end.
 - If the user asks a question, provide a helpful response.
@@ -141,7 +137,7 @@ export async function mainAgent(userInput, currentMarkmapContent, live_chatrespo
     console.log("LLM Response Generated.");
     console.log("Response:", answer);
 
-    // Create document for the chain
+    // Creates document for the chain
     const documents = [{
         pageContent: answer,
         metadata: { source: "chat" }
