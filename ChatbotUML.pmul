@@ -1,0 +1,45 @@
+@startuml
+
+class ChatOllama {
+    - model: String
+    - temperature: Float
+    - maxRetries: Int
+    - verbose: Boolean
+}
+
+class BufferMemory {
+    - returnMessages: Boolean
+    - memoryKey: String
+    - inputKey: String
+}
+
+class ConversationChain {
+    - memory: BufferMemory
+    - llm: ChatOllama
+    - prompt: ChatPromptTemplate
+    + invoke(input, current_markmap)
+}
+
+class ChatPromptTemplate {
+    - messages: List
+    + fromMessages(messages)
+}
+
+class editMarkmapChain {
+    + invoke(context, structureGuidelines, markmapMarkdown, input, documents)
+}
+
+class mainAgent {
+    + mainAgent(userInput, currentMarkmapContent, live_chatresponse_function)
+}
+
+ConversationChain --> ChatOllama
+ConversationChain --> BufferMemory
+ConversationChain --> ChatPromptTemplate
+
+mainAgent --> ConversationChain
+mainAgent --> editMarkmapChain
+
+editMarkmapChain --> ChatOllama
+
+@enduml

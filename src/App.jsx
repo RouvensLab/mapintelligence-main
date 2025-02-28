@@ -83,12 +83,14 @@ markmap:
   return (
     <div className='container'>
       {user ? (
+        // Chatinterface
         <>
           <List/>
           <Chat onSendMessage={handleSendMessage} chatHistory={chatHistory} />
           <Graph markdown={markdown} />
         </>
       ) : (
+        // Login interface
         <Login />
       )}
       <Notification />
