@@ -21,9 +21,9 @@ const Chat = ({ onSendMessage, chatHistory }) => {
     };
 
     const handleSend = async (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {
+        if (e.key === "Enter" && !e.shiftKey) {// Send the message when the user presses Enter and not Shift+Enter
             e.preventDefault();
-            if (text.trim()) {
+            if (text.trim()) {// Check if the text input is not empty
                 // Create a new message object for the user's message
                 const newMessage = {
                     id: messages.length + 1,

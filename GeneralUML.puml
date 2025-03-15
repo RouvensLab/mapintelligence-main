@@ -9,25 +9,35 @@ package "src" {
     }
     package "chat" {
       class Chat {
-        +onSendMessage: function
+        +messages: array
+        +text: string
+        +open: boolean
         +chatHistory: Array
+        +onSendMessage: function
+        +handleSend()
       }
     }
     package "graph" {
       class Graph {
         +markdown: string
+        +useMarkmap()
       }
     }
     package "list" {
       class List {
+        +addMode: boolean
       }
     }
     package "login" {
       class Login {
+        +avatar: object
+        +handleAvatar()
+        +handleLogin()
       }
     }
     package "notification" {
       class Notification {
+        +ToastContainer
       }
     }
   }
@@ -39,12 +49,13 @@ package "src" {
     +handleSendMessage(message: string, update_Bot_stream_func: function): Promise<string>
   }
   
-  App --> Chat
-  App --> List
-  App --> Login
-  App --> Notification
-  App --> Graph
+  App --> Chat : enthält
+  App --> Graph : enthält
+  App --> List : enthält
+  App --> Login : enthält
+  App --> Notification : enthält
   App --> Chatbot : uses
+  Chat --> Chatbot : uses
 }
 
 @enduml

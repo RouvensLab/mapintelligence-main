@@ -1,0 +1,14 @@
+@startuml
+actor Nutzer
+participant "Chatbot-Interface" as Chat
+participant "LLM (Ollama)" as LLM
+participant "Mindmap-Generator" as Mindmap
+
+Nutzer -> Chat: Stellt Frage ("Was ist Fusion Energy?")
+Chat -> LLM: Sendet Anfrage mit Prompt
+LLM --> Chat: Liefert Textantwort
+Chat -> Mindmap: Übergibt Antwort für Mindmap
+Mindmap --> Chat: Generiert und rendert Mindmap
+Chat --> Nutzer: Zeigt Textantwort und Mindmap
+
+@enduml

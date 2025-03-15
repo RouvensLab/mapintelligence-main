@@ -1,0 +1,33 @@
+@startuml
+actor Nutzer
+participant "App" as App
+participant "Chat" as Chat
+participant "Chatbot" as Chatbot
+participant "LLM" as LLM
+participant "Graph" as Graph
+
+== 1. Nutzer sendet Nachricht ==
+Nutzer -> Chat: 1. Gibt Nachricht ein und sendet
+Chat -> App: 2. Ruft handleSendMessage auf
+
+== 2. Verarbeitung der Nachricht ==
+App -> Chatbot: 3. Sendet Nachricht an mainAgent
+
+== 3. Erste LLM-Abfrage: Textantwort ==
+Chatbot -> LLM: 4. Erste Abfrage (Textantwort)
+LLM --> Chatbot: 5. Liefert Textantwort
+Chatbot --> App: 6. Gibt Textantwort zurück
+
+== 4. Chatverlauf aktualisieren ==
+App -> Chat: 7. Aktualisiert Chatverlauf
+Chat --> Nutzer: 8. Zeigt Textantwort
+
+== 5. Zweite LLM-Abfrage: Mindmap-Update ==
+Chatbot -> LLM: 9. Zweite Abfrage (Mindmap-Update)
+LLM --> Chatbot: 10. Liefert aktualisiertes Markdown
+Chatbot --> App: 11. Gibt Markdown zurück
+
+== 6. Mindmap aktualisieren ==
+App -> Graph: 12. Aktualisiert markdown-State
+Graph --> Nutzer: 13. Rendert aktualisierte Mindmap
+@enduml
