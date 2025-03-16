@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./chat.css";
 import EmojiPicker from "emoji-picker-react";
 
+
 const Chat = ({ onSendMessage, chatHistory, chatHistoryTitel }) => {
     const [open, setOpen] = useState(false);
     const [text, setText] = useState("");
@@ -9,32 +10,32 @@ const Chat = ({ onSendMessage, chatHistory, chatHistoryTitel }) => {
     const [ChatTitel, setChatTitel] = useState(chatHistoryTitel || "Welcome to the Chat");
 
     const endRef = useRef(null);
-
+    // Scroll to the bottom of the chat when a new message is added
     useEffect(() => {
         endRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
-
+    // Update the chat messages and title when the chat history changes
     useEffect(() => {
         setMessages(chatHistory);
         setChatTitel(chatHistoryTitel);
     }, [chatHistory, chatHistoryTitel]);
-
+    // Handle the emoji click event
     const handleEmoji = (e) => {
         setText((prev) => prev + e.emoji);
         setOpen(false);
     };
-
+    // Handle the send message event
     const handleSend = async (e) => {
-        if ((e.type === "keydown" && e.key === "Enter" && !e.shiftKey) || e.type === "click") {
+        if ((e.type === "keydown" && e.key === "Enter" && !e.shiftKey) || e.type === "click") {// Send the message when the Enter key is pressed without the Shift key
             e.preventDefault();
-            if (text.trim()) {
+            if (text.trim()) {// Check if the message is not empty
                 const newMessage = {
                     id: messages.length + 1,
                     text,
                     own: true,
                 };
-                setMessages((prev) => [...prev, newMessage]);
-                setText("");
+                setMessages((prev) => [...prev, newMessage]);// Add the new message to the chat
+                setText("");// Clear the message input field
 
                 let botMessage = {
                     id: messages.length + 2,
@@ -42,8 +43,8 @@ const Chat = ({ onSendMessage, chatHistory, chatHistoryTitel }) => {
                     own: false,
                     timestamp: "wird bearbeitet..."
                 };
-                setMessages((prev) => [...prev, botMessage]);
-
+                setMessages((prev) => [...prev, botMessage]);// Add the new message to the chat
+                // Function to update the bot message
                 const updateBotMessage = (token) => {
                     botMessage.text += token;
                     setMessages((prev) => {
@@ -53,10 +54,10 @@ const Chat = ({ onSendMessage, chatHistory, chatHistoryTitel }) => {
                     });
                 };
 
-                const response = await onSendMessage(text, updateBotMessage);
+                const response = await onSendMessage(text, updateBotMessage);// Send the message to the server
                 botMessage.text = response;
                 botMessage.timestamp = "";
-                setMessages((prev) => {
+                setMessages((prev) => {// Add the bot response to the chat
                     const updatedMessages = [...prev];
                     updatedMessages[updatedMessages.length - 1] = { ...botMessage, id: messages.length + 2 };
                     return updatedMessages;
@@ -75,7 +76,8 @@ const Chat = ({ onSendMessage, chatHistory, chatHistoryTitel }) => {
                 </div>
             </div>
             <div className="center">
-                {messages.map((message) => (
+                {messages.map((message) => (// Render the chat messages
+                    // Render the chat messages
                     <div key={message.id} className={`message ${message.own ? "own" : ""}`}>
                         {!message.own && <img src="./profil.png" alt="" />}
                         <div className="texts">

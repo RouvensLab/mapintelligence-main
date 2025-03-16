@@ -36,7 +36,7 @@ const App = () => {
       setMemoryBuffer(selectedChat.memoryBuffer);
     }
   }, []);
-
+  // Compare this snippet
   useEffect(() => {
     if (selectedChatId !== null) {
       const savedChats = JSON.parse(localStorage.getItem('chats')) || [];
@@ -69,10 +69,10 @@ const App = () => {
     console.log('Saving updated chats to localStorage:', updatedChats);
     localStorage.setItem('chats', JSON.stringify(updatedChats));
   }, [markdown, chatHistory, memoryBuffer, selectedChatId]);
-
+  // getting the response from the bot and updating all the necessary states
   const handleSendMessage = async (message, update_Bot_stream_func) => {
     console.log("Sending message:", message);
-
+    // Send the message to the bot and get the response. update_Bot_stream_func is a function that updates the bot message in the chat
     const response = await mainAgent(
       message,
       markdown,
@@ -95,38 +95,39 @@ const App = () => {
 
     return response.answer;
   };
-
+  //function that handles the chat selection
   const handleChatSelect = (chat) => {
     setSelectedChatId(chat.id);
   };
 
+  //handle the splitter mouse down event
   const handleSplitterMouseDown = (e) => {
     e.preventDefault();
     document.addEventListener('mousemove', handleSplitterMouseMove);
     document.addEventListener('mouseup', handleSplitterMouseUp);
   };
-
+  //handle the splitter mouse move event
   const handleSplitterMouseMove = (e) => {
     const newPosition = (e.clientX / window.innerWidth) * 100;
     setSplitterPosition(newPosition);
   };
-
+  //handle the splitter mouse up event
   const handleSplitterMouseUp = () => {
     document.removeEventListener('mousemove', handleSplitterMouseMove);
     document.removeEventListener('mouseup', handleSplitterMouseUp);
   };
-
+  //handle the editor splitter mouse down event
   const handleEditorSplitterMouseDown = (e) => {
     e.preventDefault();
     document.addEventListener('mousemove', handleEditorSplitterMouseMove);
     document.addEventListener('mouseup', handleEditorSplitterMouseUp);
   };
-
+  //handle the editor splitter mouse move event
   const handleEditorSplitterMouseMove = (e) => {
     const newPosition = (e.clientY / window.innerHeight) * 100;
     setEditorSplitterPosition(newPosition);
   };
-
+  //handle the editor splitter mouse up event
   const handleEditorSplitterMouseUp = () => {
     document.removeEventListener('mousemove', handleEditorSplitterMouseMove);
     document.removeEventListener('mouseup', handleEditorSplitterMouseUp);
