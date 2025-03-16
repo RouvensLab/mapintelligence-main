@@ -1,68 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Chat from "./components/chat/Chat";
 import List from "./components/list/List";
 import Login from "./components/login/Login";
 import Notification from "./components/notification/Notification";
 import Graph from "./components/graph/Graph";
 import { mainAgent } from "./components/api/Chatbot";
-
-/**
- * App component that serves as the main entry point for the application.
- * 
- * @component
- * 
- * @example
- * return (
- *   <App />
- * )
- * 
- * @returns {JSX.Element} The rendered component.
- * 
- * @description
- * The App component manages the state for markdown content and chat history.
- * It conditionally renders different components based on the user's authentication status.
- * 
- * @state {string} markdown - The markdown content used for rendering the graph.
- * @state {Array} chatHistory - The history of chat messages.
- * 
- * @param {boolean} user - A boolean indicating if the user is authenticated.
- * 
- * @function handleSendMessage
- * @description Sends a message to the main agent and updates the chat history and markdown content.
- * @param {string} message - The message to be sent.
- * @param {function} update_Bot_stream_func - A function to update the bot stream.
- * @returns {Promise<string>} The response answer from the main agent.
- */
+import "./components/graph/Graph.css";
+import "./App.css";
 
 const App = () => {
-  //const [topMarkdown, setTopMarkdown] = useState(``);
-  const [markdown, setMarkdown] = useState(` 
----
-title: Mindmap Title
-markmap:
-  colorFreezeLevel: 2
----
-
+  const [markdown, setMarkdown] = useState(`
 # Topic
 ## Here
 ### There
 - Sub
 - Sub
  `);
- 
+  const [selectedChatId, setSelectedChatId] = useState(null);
+  const [chatHistoryTitel, setChatHistoryTitel] = useState("Welcome to the Chat");
   const [chatHistory, setChatHistory] = useState([]);
+  const [memoryBuffer, setMemoryBuffer] = useState([]);
+  const [splitterPosition, setSplitterPosition] = useState(50);
+  const [editorSplitterPosition, setEditorSplitterPosition] = useState(50);
   const user = true;
-  
+
+  useEffect(() => {
+    // Load selected chat data from localStorage on component mount
+    const savedChats = JSON.parse(localStorage.getItem('chats')) || [];
+    if (savedChats.length > 0) {
+      const selectedChat = savedChats.find(chat => chat.id === selectedChatId) || savedChats[0];
+      setSelectedChatId(selectedChat.id);
+      setChatHistoryTitel(selectedChat.name);
+      setMarkdown(selectedChat.markmap);
+      setChatHistory(selectedChat.messages);
+      setMemoryBuffer(selectedChat.memoryBuffer);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedChatId !== null) {
+      const savedChats = JSON.parse(localStorage.getItem('chats')) || [];
+      const selectedChat = savedChats.find(chat => chat.id === selectedChatId);
+      console.log('Selected chat:', selectedChat);
+      if (selectedChat) {
+        setChatHistoryTitel(selectedChat.name);
+        setMarkdown(selectedChat.markmap);
+        setChatHistory(selectedChat.messages);
+        setMemoryBuffer(selectedChat.memoryBuffer);
+      }
+      //reload the chat
+    }
+  }, [selectedChatId]);
+
+  useEffect(() => {
+    // Save selected chat data to localStorage whenever it changes
+    const savedChats = JSON.parse(localStorage.getItem('chats')) || [];
+    const updatedChats = savedChats.map(chat => {
+      if (chat.id === selectedChatId) {
+        return {
+          ...chat,
+          markmap: markdown,
+          messages: chatHistory,
+          memoryBuffer: memoryBuffer
+        };
+      }
+      return chat;
+    });
+    console.log('Saving updated chats to localStorage:', updatedChats);
+    localStorage.setItem('chats', JSON.stringify(updatedChats));
+  }, [markdown, chatHistory, memoryBuffer, selectedChatId]);
 
   const handleSendMessage = async (message, update_Bot_stream_func) => {
     console.log("Sending message:", message);
-    
+
     const response = await mainAgent(
       message,
       markdown,
       update_Bot_stream_func
     );
-    
+
     console.log("Response from mainAgent:", response);
     console.log("New markmap:", response.newMarkmap);
 
@@ -80,17 +96,58 @@ markmap:
     return response.answer;
   };
 
+  const handleChatSelect = (chat) => {
+    setSelectedChatId(chat.id);
+  };
+
+  const handleSplitterMouseDown = (e) => {
+    e.preventDefault();
+    document.addEventListener('mousemove', handleSplitterMouseMove);
+    document.addEventListener('mouseup', handleSplitterMouseUp);
+  };
+
+  const handleSplitterMouseMove = (e) => {
+    const newPosition = (e.clientX / window.innerWidth) * 100;
+    setSplitterPosition(newPosition);
+  };
+
+  const handleSplitterMouseUp = () => {
+    document.removeEventListener('mousemove', handleSplitterMouseMove);
+    document.removeEventListener('mouseup', handleSplitterMouseUp);
+  };
+
+  const handleEditorSplitterMouseDown = (e) => {
+    e.preventDefault();
+    document.addEventListener('mousemove', handleEditorSplitterMouseMove);
+    document.addEventListener('mouseup', handleEditorSplitterMouseUp);
+  };
+
+  const handleEditorSplitterMouseMove = (e) => {
+    const newPosition = (e.clientY / window.innerHeight) * 100;
+    setEditorSplitterPosition(newPosition);
+  };
+
+  const handleEditorSplitterMouseUp = () => {
+    document.removeEventListener('mousemove', handleEditorSplitterMouseMove);
+    document.removeEventListener('mouseup', handleEditorSplitterMouseUp);
+  };
+
   return (
     <div className='container'>
       {user ? (
-        // Chatinterface
         <>
-          <List/>
-          <Chat onSendMessage={handleSendMessage} chatHistory={chatHistory} />
-          <Graph markdown={markdown} />
+          <div className="splitter-container">
+            <div className="splitter-panel">
+              <Chat onSendMessage={handleSendMessage} chatHistory={chatHistory} chatHistoryTitel={chatHistoryTitel}/>
+            </div>
+            <div className="splitter" onMouseDown={handleSplitterMouseDown} />
+            <div className="splitter-panel2">
+              <Graph markdown={markdown} setMarkdown={setMarkdown} editorSplitterPosition={editorSplitterPosition} handleEditorSplitterMouseDown={handleEditorSplitterMouseDown} />
+            </div>
+          </div>
+              <List onChatSelect={handleChatSelect}/>
         </>
       ) : (
-        // Login interface
         <Login />
       )}
       <Notification />

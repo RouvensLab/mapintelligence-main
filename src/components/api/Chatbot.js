@@ -114,6 +114,16 @@ const editMarkmapChain = await createStuffDocumentsChain({ llm: model, prompt: e
 // 8️⃣ Main Agent Function
 // ------------------------------
 
+
+//make a dummy function, to save time. thiss will always return the same response
+// export async function mainAgent(userInput, currentMarkmapContent, live_chatresponse_function) {
+//     return {
+//         answer: "This is a dummy response.",
+//         newMarkmap: "## Dummy Markmap\n- This is a dummy markmap content."
+//     };
+// }
+
+
 export async function mainAgent(userInput, currentMarkmapContent, live_chatresponse_function) {
     console.log("Processing user query...");
 

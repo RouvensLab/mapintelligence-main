@@ -2,48 +2,48 @@ import { useEffect, useRef, useState } from "react";
 import "./chat.css";
 import EmojiPicker from "emoji-picker-react";
 
-const Chat = ({ onSendMessage, chatHistory }) => {
-    const [open, setOpen] = useState(false); // State to manage emoji picker visibility
-    const [text, setText] = useState(""); // State to manage the current text input
-    const [messages, setMessages] = useState(chatHistory || []); // State to manage the chat messages
+const Chat = ({ onSendMessage, chatHistory, chatHistoryTitel }) => {
+    const [open, setOpen] = useState(false);
+    const [text, setText] = useState("");
+    const [messages, setMessages] = useState(chatHistory || []);
+    const [ChatTitel, setChatTitel] = useState(chatHistoryTitel || "Welcome to the Chat");
 
-    const endRef = useRef(null); // Ref to keep track of the end of the messages for auto-scrolling
+    const endRef = useRef(null);
 
     useEffect(() => {
-        // Scroll to the end of the messages whenever the messages state changes
         endRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
+    useEffect(() => {
+        setMessages(chatHistory);
+        setChatTitel(chatHistoryTitel);
+    }, [chatHistory, chatHistoryTitel]);
+
     const handleEmoji = (e) => {
-        // Append the selected emoji to the current text input
         setText((prev) => prev + e.emoji);
-        setOpen(false); // Close the emoji picker
+        setOpen(false);
     };
 
     const handleSend = async (e) => {
-        if (e.key === "Enter" && !e.shiftKey) {// Send the message when the user presses Enter and not Shift+Enter
+        if ((e.type === "keydown" && e.key === "Enter" && !e.shiftKey) || e.type === "click") {
             e.preventDefault();
-            if (text.trim()) {// Check if the text input is not empty
-                // Create a new message object for the user's message
+            if (text.trim()) {
                 const newMessage = {
                     id: messages.length + 1,
                     text,
                     own: true,
-                    timestamp: "Just now"
                 };
-                setMessages((prev) => [...prev, newMessage]); // Add the user's message to the messages state
-                setText(""); // Clear the text input
+                setMessages((prev) => [...prev, newMessage]);
+                setText("");
 
-                // Create a placeholder for the bot's response
                 let botMessage = {
                     id: messages.length + 2,
                     text: "",
                     own: false,
-                    timestamp: "Just now"
+                    timestamp: "wird bearbeitet..."
                 };
-                setMessages((prev) => [...prev, botMessage]); // Add the bot's placeholder message to the messages state
+                setMessages((prev) => [...prev, botMessage]);
 
-                // Function to update the bot's message incrementally
                 const updateBotMessage = (token) => {
                     botMessage.text += token;
                     setMessages((prev) => {
@@ -53,9 +53,9 @@ const Chat = ({ onSendMessage, chatHistory }) => {
                     });
                 };
 
-                // Send the user's message and get the bot's response
                 const response = await onSendMessage(text, updateBotMessage);
-                botMessage.text = response; // Update the bot's message with the final response
+                botMessage.text = response;
+                botMessage.timestamp = "";
                 setMessages((prev) => {
                     const updatedMessages = [...prev];
                     updatedMessages[updatedMessages.length - 1] = { ...botMessage, id: messages.length + 2 };
@@ -69,22 +69,15 @@ const Chat = ({ onSendMessage, chatHistory }) => {
         <div className='chat'>
             <div className="top">
                 <div className="user">
-                    <img src="./avatar.png" alt="" />
                     <div className="texts">
-                        <span>Jane Doe</span>
-                        <p>I love it when you call me Señorita.</p>
+                        <span>{ChatTitel}</span>
                     </div>
-                </div>
-                <div className="icons">
-                    <img src="./phone.png" alt="" />
-                    <img src="./video.png" alt="" />
-                    <img src="./info.png" alt="" />
                 </div>
             </div>
             <div className="center">
                 {messages.map((message) => (
                     <div key={message.id} className={`message ${message.own ? "own" : ""}`}>
-                        {!message.own && <img src="./avatar.png" alt="" />}
+                        {!message.own && <img src="./profil.png" alt="" />}
                         <div className="texts">
                             <pre className="message-text">{message.text}</pre>
                             <span>{message.timestamp}</span>
@@ -95,21 +88,19 @@ const Chat = ({ onSendMessage, chatHistory }) => {
             </div>
             <div className="bottom">
                 <div className="icons">
-                    <img src="./img.png" alt="" />
-                    <img src="./camera.png" alt="" />
-                    <img src="./mic.png" alt="" />
                 </div>
                 <textarea
-                    placeholder="Type a message..."
+                    placeholder="Type in something..."
                     value={text}
                     onChange={(e) => setText(e.target.value)}
-                    onKeyPress={handleSend}
+                    onKeyDown={handleSend}
                     rows="3"
                 />
                 <div className="emoji">
                     <img
                         src="./emoji.png"
-                        alt=""
+                        alt="Emoji"
+                        className="emoji-icon"
                         onClick={() => setOpen((prev) => !prev)}
                     />
                     {open && (

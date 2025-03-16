@@ -1,15 +1,12 @@
-import ChatList from "./chatList/ChatList" 
-import "./list.css"
-import Userinfo from "./userInfo/Userinfo"
+import ChatList from "./chatList/ChatList";
+import "./list.css";
 
-//List-Komponente kombiniert Benutzerinfo & Chatliste
-const List = () => {
+const List = ({ onChatSelect }) => {
     return (
-        <div className='list'>
-            <Userinfo/> {/*Benutzerinformationen anzeigen*/}
-            <ChatList/> {/*Liste der Chats anzeigen*/}
+        <div className="list">
+            <ChatList onChatSelect={onChatSelect} />
         </div>
-    )
-}
+    );
+};
 
-export default List
+export default List;

@@ -11,20 +11,22 @@
 body {
   background-image: url("/FallingNUm.gif"); /*Hintergrundbild für Body*/
   display: flex; /*flexibler Layout, um die Elemente im Container zu zentrieren*/
-  align-items: center; /*Elemente vertikal zentrieren*/
+  align-items: flex-start; /*Elemente vertikal zentrieren*/
   justify-content: center; /*Elemente horizontal zentrieren*/
-  height: 100vh; /*die Seite füllt den ganzen Bildschirm*/
+  height: 90vh; /*die Seite füllt den ganzen Bildschirm*/
   color: white; /*weisser Text*/
+  overflow: hidden;
 }
 
 
-
-.container{
-  width: 95vw; /*der Container ist 80% der Bildschirmbreite*/
-  height: 95vh; /*der Container ist 90% der Bildschirmhöhe*/
-  background-color: rgba(36, 36, 148, 0.377); /*halbtransparente Hintergrundfarbe*/
-  backdrop-filter: blur(19px) saturate(180%); /* unscharfer & bunter Hintergrund */
-  border-radius: 12px; /*Ecken abrunden*/
-  border: 1px solid rgba(155, 155, 155, 0.115); /*dünne, durchsichtige Grenze einfügen*/
-  display: flex; /*flexibler Container*/
+.container {
+  width: 90vw; /* Der Container ist 95% der Bildschirmbreite */
+  height: 90vh; /* Der Container ist 95% der Bildschirmhöhe */
+  background-color: rgba(23, 23, 89, 0.377);
+  backdrop-filter: blur(19px) saturate(180%);
+  border-radius: 12px;
+  border: 1px solid rgba(155, 155, 155, 0.115);
+  display: flex;
+  margin-top: 5vh; /* Abstand oben */
+  margin-bottom: 5vh; /* Abstand unten hinzufügen */
 }

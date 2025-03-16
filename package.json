@@ -24,6 +24,7 @@
     "firebase": "^11.3.0",
     "langchain": "^0.3.19",
     "markmap-lib": "0.11.6",
+    "markmap-toolbar": "^0.18.10",
     "markmap-view": "0.2.6",
     "parcel-bundler": "^1.6.1",
     "prompt-sync": "^4.2.0",

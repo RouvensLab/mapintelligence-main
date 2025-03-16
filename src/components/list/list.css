@@ -1,5 +1,6 @@
 .list {
-    flex: 1;
+    width: 20vw; /* 30% der Bildschirmbreite */
+    max-width: 0px; /* Mindestens 300px, falls Bildschirm klein ist */
     display: flex;
     flex-direction: column;
 }

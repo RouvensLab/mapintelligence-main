@@ -2,184 +2,163 @@
 .chat {
     flex: 2; /*nimmt 2 Teile des verfügbaren Platzes ein*/
     border-left: 1px solid #dddddd35; /*linke Grenze des Chatbereichs*/
-        border-right: 1px solid #dddddd35; /*rechte Grenze des Chatbereichs*/
-    height: 100%; /*Höhe des Chatbereichs auf 100% setzen*/
+    border-right: 1px solid #dddddd35; /*rechte Grenze des Chatbereichs*/
+    height: 100vh; /*Höhe des Chatbereichs auf 100% setzen*/
     display: flex;
     flex-direction: column; /*Anordnung der Elemente von oben nach unten*/
+    overflow: auto; /* Verhindert das Überlaufen des Containers */
+}
 
-    
-    /*Stil für oberen Bereich*/
-    .top {
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-bottom: 1px solid #dddddd35; /*untere Grenze des oberen Bereichs*/
+.top {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #dddddd35; /*untere Grenze des oberen Bereichs*/
+}
 
-        /*Stil für Benutzerbereich*/
-        .user{
-            display: flex;
-            align-items: center;
-            gap: 20px; /*Abstand zwischen den Elemente*/
+.top .user .texts span {
+    font-size: 24px; /* Schriftgröße vergrößert */
+    font-weight: bold;
+    text-align: center;
+}
 
-            img{
-                width: 60px;
-                height: 60 px;
-                border-radius: 50%;
-                object-fit: cover;
-            }
+.center {
+    flex: 1; /*nimmt den restlichen Platz ein*/
+    overflow-y: auto; /*ermöglicht Scrollen, wenn Inhalt grösser ist als der Bereich*/
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
-            .texts{
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
+.message {
+    max-width: 70%; /*setzt maximale Breite der Nachrichten auf 70%*/
+    display: flex;
+    gap: 20px;
+    background-color: #000000;
+    border-radius: 5px;
+    border: #ffffff;
+    padding: 10px;
+}
 
-                span{
-                    font-size: 18px; /*Schriftgrösse auf 18px setzen*/
-                    font-weight: bold; /*macht Schrift fett*/
-                }
+.message.own {
+    align-self: flex-end; /*verschiebt eigene Nachrichten nach rechts*/
+    background-color: rgb(63, 81, 152);
+    border-radius: 5px;
+    border: #ffffff;
+}
 
-                p {
-                    font-size: 14px;
-                    font-weight: 300; /*setzt Gewicht des Textes auf leicht*/
-                    color: #a5a5a5;
-                }
-            }
-        }
+.message img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+}
 
-        .icons{
-            display: flex;
-            gap: 20px;
+.texts {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
 
-            img{
-                width: 20px;
-                height: 20px;
-            }
-        }
-    }
+.texts img {
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+}
 
-    /*Stil für Nachrichtenbereich*/
-    .center{
-        padding: 20px;
-        flex: 1; /*nimmt den restlichen Platz ein*/
-        overflow: scroll; /*ermöglicht Scrollen, wenn Inhalt grösser ist als der Bereich*/
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+.texts p {
+    padding: 20px;
+    background-color: rgba(17, 25, 40, 0.3);
+    border-radius: 10px;
+}
 
-        .message {
-            max-width: 70%; /*setzt maximale Breite der Nachrichten auf 70%*/
-            display: flex;
-            gap: 20px;
+.texts span {
+    font-size: 13px;
+}
 
-            &.own{
-                align-self: flex-end; /*verschiebt eigene Nachrichten nach rechts*/
+.message-text {
+    font-family: inherit;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    max-width: 100%;
+    overflow-x: auto;
+}
 
-                .texts {
-                    p {
-                        background-color: #5183fe;
-                    }
-                }
-            }
+.message.own .texts .message-text {
+    color: white;
+}
 
-            img {
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                object-fit: cover;
-            }
-            
-            .texts{
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-                gap: 5px;
+.bottom {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #dddddd35;
+    gap: 20px;
+    margin-top: auto;
+}
 
-                img {
-                    width: 100%;
-                    height: 300px;
-                    border-radius: 10px;
-                    object-fit: cover;
-                }
+.bottom .emoji img {
+    position: relative;
+    object-fit: cover;
+    cursor: pointer;
+    width: 20px !important;
+    height: 20px !important;
+}
 
-                p {
-                    padding: 20px;
-                    background-color: rgba(17, 25, 40, 0.3);
-                    border-radius: 10px;
-                }
+.emoji-icon {
+    width: 30px !important;
+    height: 30px !important;
+    max-width: 30px !important;
+    max-height: 30px !important;
+    object-fit: contain;
+}
 
-                span{
-                    font-size: 13px;
-                }
+.bottom textarea {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    flex: 1;
+    outline: none;
+    font-size: 16px;
+    resize: none;
+    height: 40px;
+}
 
-                .message-text {
-                    font-family: inherit;
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
-                    margin: 0;
-                    padding: 0;
-                    background: none;
-                    border: none;
-                    max-width: 100%;
-                    overflow-x: auto;
-                }
-            }
+.emoji {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+}
 
-            &.own .texts .message-text {
-                color: white;
-            }
-        }
-    }
+.picker {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+}
 
-    .bottom{
-        padding: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-top: 1px solid #dddddd35;
-        gap: 20px;
-        margin-top: auto;
+.sendButton {
+    background-color: #244aab;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Übergangs-Effekt für die Farbänderung */
+}
 
-        .icons {
-            display: flex;
-            gap: 20px;
-
-        }    
-           
-        img {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        
-        input {
-            flex: 1;
-            background-color: rgba(17, 25, 40, 0.5);
-            border: none;
-            outline: none;
-            color: white;
-            padding: 20px;
-            border-radius: 10px;
-            font-size: 16px;
-        }
-
-        .emoji{
-            position: relative;
-
-            .picker{
-                position: absolute;
-                bottom: 50px;
-                left: 0;
-            }
-        }
-
-        .sendButton{
-            background-color: #5183fe;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    }
+.sendButton:hover {
+    background-color: #ffffff60; /* Setzt die Farbe beim Hover */
 }
