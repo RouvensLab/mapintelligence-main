@@ -36,7 +36,7 @@ const ChatList = ({ onChatSelect }) => {
             onChatSelect(selectedChat);
         }
     };
-
+    
     const createNewChat = () => {
         if (newChatName) {
             const newChat = { id: Date.now(), name: newChatName, messages: [], markmap: "", memoryBuffer: [] };

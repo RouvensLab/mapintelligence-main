@@ -3,6 +3,7 @@ import { Markmap, loadCSS, loadJS } from 'markmap-view';
 import { Transformer } from 'markmap-lib';
 import { Toolbar } from 'markmap-toolbar';
 import 'markmap-toolbar/dist/style.css';
+import "./Graph.css"
 
 // Create a new instance of the transformer
 const transformer = new Transformer();
@@ -53,7 +54,7 @@ const Graph = ({ markdown, setMarkdown, editorSplitterPosition, handleEditorSpli
     //removes ``` from the markmap
     markmapMD = markmapMD.replace(/```/g, "");
     //removes the first line from the markmap
-    markmapMD = markmapMD.replace(/.*\n/, "");
+    // markmapMD = markmapMD.replace(/.*\n/, "");
     return markmapMD;
   }
 
@@ -63,6 +64,7 @@ const Graph = ({ markdown, setMarkdown, editorSplitterPosition, handleEditorSpli
   };
 //function that handles the update click
   const handleUpdateClick = () => {
+    console.log("Updating markmap with:", editorContent);
     setMarkdown(editorContent);
   };
 //function that renders the toolbar
@@ -77,12 +79,23 @@ const Graph = ({ markdown, setMarkdown, editorSplitterPosition, handleEditorSpli
   }
 
   return (
-    <div className="graph-container" style={{ gridTemplateRows: `${editorSplitterPosition}% 5px ${100 - editorSplitterPosition}%`}}>
+    <div className="graph-container" style={{ gridTemplateRows: `${editorSplitterPosition}% 5px ${100 - editorSplitterPosition}% 15px` }}>
+      <div class="grow-wrap">
       <textarea
+        id = "editor"
         value={editorContent}
         onChange={handleEditorChange}
-        style={{ width: "100%", height: "100%", padding: "10px", boxSizing: "border-box" }}
+        style={{ width: "100%", height: "100%" }}
+        //when the users presses ctrl+s, the markmap will be updated
+        onKeyDown={(e) => {
+          if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            handleUpdateClick();
+          }
+        }
+      }
       />
+      </div>
       <div className="splitter" onMouseDown={handleEditorSplitterMouseDown} />
       <svg ref={refSvg} style={{ width: "100%", height: "100%" }}></svg>
       <div className="toolbar" ref={refToolbar}></div>

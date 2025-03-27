@@ -5,7 +5,7 @@ import { createStuffDocumentsChain } from "langchain/chains/combine_documents";
 // import { MemoryVectorStore } from "langchain/vectorstores/memory";
 // import { createRetrievalChain } from "langchain/chains/retrieval";
 // import { createHistoryAwareRetriever } from "langchain/chains/history_aware_retriever";
-import { HumanMessage, AIMessage } from "@langchain/core/messages";
+// import { HumanMessage, AIMessage } from "@langchain/core/messages";
 
 import { ConversationChain } from "langchain/chains";
 
@@ -50,6 +50,17 @@ Branch: Main
   HumanMessagePromptTemplate.fromTemplate("{input}"),
 ]);
 
+// tools: 
+// const tools = [
+//     // function for the first message that says if the next llm should update the markmap
+//     new DynamicTool({
+//       name: "update-markmap",
+//       description:
+//         "call this if some changes should be done to the markmap",
+//       func: async () => {"update-markmap"},
+//     }),
+//   ];
+
 
 const bufferMemory = new BufferMemory({
     returnMessages: true,
@@ -67,40 +78,96 @@ const chain = new ConversationChain({
 // 6️⃣ Markmap Editing Logic
 // ------------------------------
 
+// ------------------------------
+// 1️⃣ Markmap Structure Guidelines
+// ------------------------------
 const markmapStructureGuidelines = `
-A Markmap is a markdown file that typically includes:
-1. A YAML frontmatter delimited by --- lines that contains keys such as 'title' and 'markmap' options (e.g., colorFreezeLevel).
-2. Subsequent sections defined with markdown headers (##, ###, etc.) that represent nodes.
-3. Various content types such as lists, code blocks, tables, images, and links.
-4. Consistent formatting and hierarchical nesting for clarity.
-
-Example Markmap:
-  ## Links
-  - [Website](https://markmap.js.org/)
-
-  ## Features
-  - **strong** ~~del~~ *italic* ==highlight==
-  - [x] checkbox
-  - Katex: $x = {-b \pm \sqrt{b^2-4ac} \over 2a}$ 
+# Markmap Structure Guidelines
+- Die Ausgabe muss im Markmap-kompatiblen Markdown-Format erfolgen.
+- Hauptthemen sind fett formatiert (z. B. **Thema**) und sollten, wenn passend, mit einem SVG-Icon versehen werden (z. B. ![](cliparts/icon.svg)).
+- Verwende eingerückte Listen für Unterthemen, um die hierarchische Beziehung deutlich zu machen.
+- Achte darauf, dass alle Ebenen korrekt formatiert sind – keine zusätzlichen Erklärungen oder Kommentare in der Ausgabe.
+- Beispiel:
+  \`
+  # Geschichte Indiens
+  - ![Map](cliparts/map.svg) **Indien in der Geschichte**
+  - ![Idea](cliparts/Idee.svg) **Einleitung**
+   - **Bevölkerungsreich**, **alte Zivilisation**, **Weltreligionen**
+   - **Politische Geschichte**
+   - **Unabhängigkeit**
+  \`
 `;
 
-// 🛠️ STRICT CONSTRAINTS to ensure Markmap-only responses
+//provieds the list with all possible svg files that can be inplemented in the markmap
+
+const svgListString = `
+(cliparts/ArrowDown.svg)
+(cliparts/ArrowLeft.svg)
+(cliparts/ArrowRight.svg)
+(cliparts/ArrowUp.svg)
+(cliparts/BevölkerungUndSteigend.svg)
+(cliparts/Brücke.svg)
+(cliparts/Citation.svg)
+(cliparts/Danger.svg)
+(cliparts/decrease.svg)
+(cliparts/equilibrium.svg)
+(cliparts/Idee.svg)
+(cliparts/knot.svg)
+(cliparts/Kreislauf.svg)
+(cliparts/map.svg)
+(cliparts/Notes.svg)
+(cliparts/OneOfTreeStars.svg)
+(cliparts/Politic.svg)
+(cliparts/python_get_list.py)
+(cliparts/Route_From_there_to_there.svg)
+(cliparts/Seulendiagramm.svg)
+(cliparts/SeulendiagrammSinkend.svg)
+(cliparts/SeulendiagrammSteigend.svg)
+(cliparts/Sprechblase.svg)
+(cliparts/strenght.svg)
+(cliparts/Sycle.svg)
+(cliparts/threeOfThreeStars.svg)
+(cliparts/thumbDown.svg)
+(cliparts/thumbUP.svg)
+(cliparts/twoOfthreeStars.svg)
+`;
+
+
+// ------------------------------
+// 2️⃣ Edit Prompt für Markmap-Updates
+// ------------------------------
 const editPrompt = ChatPromptTemplate.fromMessages([
   [
     "system",
-    `You are an assistant that updates a Markmap markdown.
-**Rules:**
-- Return only the updated Markmap markdown.
-- Do not include any explanations or extra text.
-- **Do NOT include phrases like "Final Markmap:" or "Here is the result:"**
-- Directly output the modified markdown.
-- If the update instruction includes a designated branch (from a section titled "Markmap Generator Instructions"), apply the updates only to that branch.
+    `Du bist ein Assistent, der Markmaps im Markdown-Format aktualisiert. 
+Deine Aufgabe ist es, basierend auf der Update-Anweisung den vorhandenen Markmap-Inhalt zu modifizieren.
+**Regeln:**
+- Gib ausschließlich den aktualisierten Markmap-Markdown-Code aus.
+- Füge keine zusätzlichen Erklärungen oder Kommentare ein.
+- Verwende, wenn möglich, die vorgegebenen SVG-Icons.
+- Wenn in der Update-Anweisung ein spezifischer Branch genannt wird (in einem separaten Abschnitt "Markmap Generator Instructions"), wende die Änderungen ausschließlich auf diesen Branch an.
 `
   ],
-  ["system", "Context: {context}"],
-  ["system", "Structure Guidelines:\n{structureGuidelines}"],
-  ["system", "Current Markmap:\n{markmapMarkdown}"],
-  ["user", "Update instruction: {input}"],
+  [
+    "system",
+    "Kontext: {context}"
+  ],
+  [
+    "system",
+    "Structure Guidelines:\n{structureGuidelines}"
+  ],
+  [
+    "system",
+    "Liste der verfügbaren SVGs:\n{svgList}"
+  ],
+  [
+    "system",
+    "Aktueller Markmap-Inhalt:\n{markmapMarkdown}"
+  ],
+  [
+    "user",
+    "Update-Anweisung: {input}"
+  ]
 ]);
 
 
@@ -124,8 +191,10 @@ const editMarkmapChain = await createStuffDocumentsChain({ llm: model, prompt: e
 // }
 
 
-export async function mainAgent(userInput, currentMarkmapContent, live_chatresponse_function) {
+export async function mainAgent(userInput, currentMarkmapContent, live_chatresponse_function, live_markmapresponse_function) {
     console.log("Processing user query...");
+    // set the using tool variable to false
+    // let usingTool = false;
 
     const res = await chain.invoke(
         {
@@ -153,12 +222,26 @@ export async function mainAgent(userInput, currentMarkmapContent, live_chatrespo
         metadata: { source: "chat" }
     }];
 
+    // // if the response is "update-markmap" the usingTool variable will be set to true
+    // if (answer === "update-markmap") {
+
     const updatedMarkmap = await editMarkmapChain.invoke({
         context: "",
         structureGuidelines: markmapStructureGuidelines,
         markmapMarkdown: currentMarkmapContent,
+        svgList: svgListString,
         input: answer,
         documents: documents
+    }, 
+    {
+        callbacks: [
+            {
+                handleLLMNewToken(token) {
+                    live_markmapresponse_function(token);
+            }
+        }
+
+        ]
     });
 
     console.log("Updated Markmap:", updatedMarkmap);

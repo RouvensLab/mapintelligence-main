@@ -20,7 +20,9 @@ const App = () => {
   const [chatHistoryTitel, setChatHistoryTitel] = useState("Welcome to the Chat");
   const [chatHistory, setChatHistory] = useState([]);
   const [memoryBuffer, setMemoryBuffer] = useState([]);
-  const [splitterPosition, setSplitterPosition] = useState(50);
+
+
+  const [splitterPositionV, setSplitterPositionV] = useState(50);
   const [editorSplitterPosition, setEditorSplitterPosition] = useState(50);
   const user = true;
 
@@ -69,6 +71,14 @@ const App = () => {
     console.log('Saving updated chats to localStorage:', updatedChats);
     localStorage.setItem('chats', JSON.stringify(updatedChats));
   }, [markdown, chatHistory, memoryBuffer, selectedChatId]);
+
+
+  //function that is called to update the markmap
+  const update_Markmap_stream_func = (newMarkmap) => {
+    console.log("Updating markmap with:", newMarkmap);
+    setMarkdown(newMarkmap);
+  };
+
   // getting the response from the bot and updating all the necessary states
   const handleSendMessage = async (message, update_Bot_stream_func) => {
     console.log("Sending message:", message);
@@ -76,7 +86,8 @@ const App = () => {
     const response = await mainAgent(
       message,
       markdown,
-      update_Bot_stream_func
+      update_Bot_stream_func,
+      update_Markmap_stream_func
     );
 
     console.log("Response from mainAgent:", response);
@@ -109,13 +120,15 @@ const App = () => {
   //handle the splitter mouse move event
   const handleSplitterMouseMove = (e) => {
     const newPosition = (e.clientX / window.innerWidth) * 100;
-    setSplitterPosition(newPosition);
+    setSplitterPositionV(newPosition);
   };
   //handle the splitter mouse up event
   const handleSplitterMouseUp = () => {
     document.removeEventListener('mousemove', handleSplitterMouseMove);
     document.removeEventListener('mouseup', handleSplitterMouseUp);
   };
+
+
   //handle the editor splitter mouse down event
   const handleEditorSplitterMouseDown = (e) => {
     e.preventDefault();
@@ -137,7 +150,7 @@ const App = () => {
     <div className='container'>
       {user ? (
         <>
-          <div className="splitter-container">
+          <div className="splitter-container" style={{ gridTemplateColumns: `${splitterPositionV}% 5px ${100 - splitterPositionV}% 5px` }}>
             <div className="splitter-panel">
               <Chat onSendMessage={handleSendMessage} chatHistory={chatHistory} chatHistoryTitel={chatHistoryTitel}/>
             </div>
