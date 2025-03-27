@@ -1,11 +1,11 @@
 ![Beispiel Screenshot](public/BeispielScreenshot.png)
 
 
-Datum: 24.02.2025
+Datum: 28.03.2025
 
 # Mapintelligence Chat App
 
-Dieses Projekt ist eine Gruppenarbeit von: Kevin Leutwyler, Mojtaba Hasanzadeh und Narmatha Nanthakumar.
+Die MapIntelligence Chat App verbindet Künstliche Intelligenz mit einer Mindmap. Nutzer können Fragen stellen, und die Antworten werden als eine übersichtliche Mindmap dargestellt. Dieses Projekt ist eine Gruppenarbeit von: Kevin Leutwyler, Mojtaba Hasanzadeh und Narmatha Nanthakumar.
 
 ## Arbeitsaufteilung:
 

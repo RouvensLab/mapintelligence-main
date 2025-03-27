@@ -1,3 +1,13 @@
+/*
+Datum: 27.03.2025
+Projektname: MapIntelligence
+Namen: Kevin Leutwyler, Mojtaba Hasanzadeh, Narmatha Nanthakumar
+Für diesen Code zuständig: Narmatha
+Hauptquelle: YouTube-Tutorial von Lama Dev
+
+Beschreibung: Beschreibung: Dieses CSS-File enthält grundlegende Layout- und Style-Elemente für das Projekt.
+*/
+
 /*Standardabstände entfernen & Schrift für alle Elemente setzen*/
 * {
   margin: 0; /*Abstände um Elemente entfernen*/
@@ -7,26 +17,27 @@
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif; /*Schriftart für gesamte Dokument*/
 }
 
-/*Layout für Body (Seite)*/
+/*Layout für Body*/
 body {
   background-image: url("/FallingNUm.gif"); /*Hintergrundbild für Body*/
   display: flex; /*flexibler Layout, um die Elemente im Container zu zentrieren*/
   align-items: flex-start; /*Elemente vertikal zentrieren*/
   justify-content: center; /*Elemente horizontal zentrieren*/
-  height: 90vh; /*die Seite füllt den ganzen Bildschirm*/
+  height: 90vh; /*ganze Bildschirm füllen*/
   color: white; /*weisser Text*/
-  overflow: hidden;
+  overflow: hidden; /*Scrollbalken verhindern*/
 }
 
 
+/*Hauptcontainer für den Inhalt*/
 .container {
-  width: 90vw; /* Der Container ist 95% der Bildschirmbreite */
-  height: 90vh; /* Der Container ist 95% der Bildschirmhöhe */
-  background-color: rgba(23, 23, 89, 0.377);
-  backdrop-filter: blur(19px) saturate(180%);
-  border-radius: 12px;
-  border: 1px solid rgba(155, 155, 155, 0.115);
-  display: flex;
-  margin-top: 5vh; /* Abstand oben */
-  margin-bottom: 5vh; /* Abstand unten hinzufügen */
+  width: 90vw; /*Container ist 90% der Bildschirmbreite*/
+  height: 90vh; /*Container ist 90% der Bildschirmhöhe*/
+  background-color: rgba(23, 23, 89, 0.377); /*halbtransparentes Hintergrundfarbe*/
+  backdrop-filter: blur(19px) saturate(180%); /*verschwommener Hintergrund-Effekt*/
+  border-radius: 12px; /*abgerundete Ecken*/
+  border: 1px solid rgba(155, 155, 155, 0.115); /*dünner Rand*/
+  display: flex; /*Flexbox aktivieren*/
+  margin-top: 5vh; /*Abstand oben*/
+  margin-bottom: 5vh; /*Abstand unten*/
 }

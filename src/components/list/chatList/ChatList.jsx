@@ -29,14 +29,14 @@ const ChatList = ({ onChatSelect }) => {
             console.error('Error saving chats to localStorage:', error);
         }
     }, [chats]);
-
+    // Handle chat click. Set the selected chat
     const handleChatClick = (id) => {
         const selectedChat = chats.find(chat => chat.id === id);
         if (selectedChat) {
             onChatSelect(selectedChat);
         }
     };
-    
+    // Create a new chat. Add it to the chats list
     const createNewChat = () => {
         if (newChatName) {
             const newChat = { id: Date.now(), name: newChatName, messages: [], markmap: "", memoryBuffer: [] };
